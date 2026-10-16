@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
+
+//class that will store generar structure of required details for single person
 class member{
     double contribution=0;
     String name;
@@ -27,21 +29,27 @@ class member{
 
 }
 
+
+//class for storing and managing members of susu savings group
 class management{
       double sum=0;
       int week=0;
       String name;
       double contribution;
       
+      // creating array list for storing multiple values of members without limited length of members
       ArrayList<member> members = new ArrayList<>();
       Scanner in = new Scanner(System.in);
       
       void add(){
+
+        //using variable 'ch' with initial value of yes[y] to support in accepting user inputs for adding new member or not
         char ch='y';
         
         while(ch == 'y'){
             System.out.print("Enter Name:");
-            name = in.next();
+            name = in.nextLine();
+
             System.out.print("Enter Contribution:");
             contribution = in.nextDouble();
             members.add(new member(name, contribution));
@@ -56,10 +64,10 @@ class management{
             sum =sum + contri.contribution;
             }
             
-            
+            //evaluating the required money to be considered if all members had been contributed by taking money per week multiply by all members
         if((members.size() * 50) <= sum){
             week++;
-            System.out.println("We have all members of "+members.size());
+            System.out.println("We have "+members.size()+"In our saving group.");
             for(member contri: members){
                  if(contri.paid == false) {
                     contri.paid=true;
@@ -68,15 +76,15 @@ class management{
                     }
                     }
                     }else{
-                        System.out.println("There are still some one who owe us.\n");
+                        System.out.println("There are still some one else who owe us.\n");
                         }
                         
                 }
-
+                // function to display report by using array list of object members
       void report(){
-        System.out.println("Stored Details are:\n Current week="+week);
+        System.out.println("Stored Details for week "+week+" are:\n");
         for(member a: members){
-        System.out.println("Name: "+a.name+" Contribution: "+a.contribution+" Owes:"+a.owes+" Contributed in this week: "+a.paid);
+        System.out.println("Name: "+a.name+" Contribution: "+a.contribution+" Owes:"+a.owes+" paid in this week: "+a.paid);
       }
       }
 
