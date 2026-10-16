@@ -4,29 +4,50 @@ import java.util.ArrayList;
 
 //class that will store generar structure of required details for single person
 class member{
-    double contribution=0;
-    String name;
-    double owes=0;
-    boolean paid=false;
+    private double contribution=0;
+    private String name;
+    private double owes=0;
+    private boolean paid=false;
 
     member( String name, double contribution){
         this.contribution = contribution;
         this.name = name;
         owes();
     }
-    
-    void owes(){
-        if(this.contribution < 50){
-            owes = 50 - this.contribution;
-        }
+    double getContribution(){
+        return contribution;
+    }
+    String getName(){
+        return name;
+    }
+    double getOwes(){
+        return owes;
+    }
+    boolean getPaid(){
+        return paid;
     }
 
-    void contribute(double contibution){
+    void setPaid(boolean isPaid){
+        paid = isPaid;
+    }
+    void setContribution(double contribution){
+        this.contribution = contribution;
+    }
+    
+  
+
+    void contribute(double contribution){
         if((this.contribution + contribution) <= 50){
         this.contribution += contribution;
+        System.out.println("Contribution added successfully!");
         owes();
         }else{
-            System.out.println("Unable to set contribution, please try to enter "+owes+"units or below!\n");
+            System.out.println("Unable to set contribution, please try to enter "+(50 - contribution)+" units or below!\n");
+        }
+    }
+      public void owes(){
+        if(this.contribution <= 50){
+            this.owes = 50 - this.contribution;
         }
     }
 
@@ -36,8 +57,7 @@ class member{
 
 //class for storing and managing members of susu savings group
 class management{
-      double sum=0;
-      int week=0;
+      int week=1;
       String name;
       double contribution;
       
@@ -50,15 +70,15 @@ class management{
         //using variable 'ch' with initial value of yes[y] to support in accepting user inputs for adding new member or not
         char ch='y';
         
-        while(ch == 'y'){
-            System.out.print("Enter Name:");
+        while(ch == 'y' || ch == 'Y'){
+            System.out.print("\nEnter Name:");
             name = in.nextLine();
 
             System.out.print("Enter Contribution:");
             contribution = in.nextDouble();
             members.add(new member(name, contribution));
             
-            System.out.println("Do you want to add another member [y/n]");
+            System.out.print("Do you want to add another member [y/n] : ");
             ch = in.next().charAt(0);
             in.nextLine();// cleaner of buffers to allow next inputs
             }
@@ -69,43 +89,72 @@ class management{
                 int index;
                 System.out.print("Enter member id:");
                 index=in.nextInt();
-                in.nextLine(); //clean integer reading buffers
+                index -= 100; // removing 100 from Displayed ID to match with index
 
-                if(members.get(index) != null){
-                    System.out.println("Add Contribution for "+members.get(index).name+" has contribution of "+members.get(index).contribution);
+
+                in.nextLine(); //clean integer reading buffers
+                try{
+
+                    if(members.get(index).getContribution() < 50){
+                    System.out.print("\nAdd Contribution for "+members.get(index).getName()+" has contribution of "+members.get(index).getContribution()+": ");
                     double temp=in.nextDouble();
                     in.nextLine();
                     members.get(index).contribute(temp);//changing value of contribution
+                    }else{
+                       System.out.print("\nMember "+members.get(index).getName()+" has contribution of "+members.get(index).getContribution()+" Which is enough.");
+                     
+                    }
+                }catch(IndexOutOfBoundsException e){
+                    System.out.println("Please Enter valid member Id Please check on report.");
                 }
             }
       
       void close(){
+      double sum=0;
         for(member contri: members){
-            sum =sum + contri.contribution;
+            sum =sum + contri.getContribution();
             }
             
             //evaluating the required money to be considered if all members had been contributed by taking money per week multiply by all members
         if((members.size() * 50) <= sum){
             week++;
-            System.out.println("We have "+members.size()+"In our saving group.");
+            System.out.println("\nWe have "+members.size()+" people In our saving group.");
             for(member contri: members){
-                 if(contri.paid == false) {
-                    contri.paid=true;
-                    System.out.println("\nWeek ended, We paid "+contri.name);
+                 if(contri.getPaid() == false) {
+                    contri.setPaid(true);
+
+                  // resetting contributed people after all others get paid in next week
+                    
+                    if(members.get(members.size() - 1).getPaid() == true){
+                        for(member resetPaid: members) resetPaid.setPaid(false); 
+
+
+
+                    for(member reset: members) {
+                        reset.setContribution(0);
+                        reset.owes();
+                    }
+                    System.out.println("Week ended, We paid "+contri.getName()+".");
                     break;
                     }
                     }
                     }else{
-                        System.out.println("There are still some one else who owe us.\n");
+                        System.out.println("There are still some one else who owe us, closing week could not be completed. Try again later!\n");
                         }
                         
                 }
                 // function to display report by using array list of object members
       void report(){
+        System.out.println("_____________________________________________________________________________________");
         System.out.println("Stored Details for week "+week+" are:\n");
+
+        int temporaryIndex=100; //starting with 100 as Id of every member registered and add to index of the list
         for(member a: members){
-        System.out.println("Name: "+a.name+" Contribution: "+a.contribution+" Owes:"+a.owes+" paid in this week: "+a.paid);
+        System.out.println("Member Id:"+temporaryIndex + " Name: "+a.getName()+" Contribution Balance: "+a.getContribution()+" Owes:"+a.getOwes()+" paid: "+a.getPaid());
+            temporaryIndex++;
       }
+      System.out.println("_____________________________________________________________________________________");
+        
       }
 
 }
@@ -120,7 +169,7 @@ public class susu{
 
       
         while(choice == 'y'){
-              System.out.print("\n\nSelect option of Susu management: \n1. Adding member \n2.Add your\n3. Closing week \n4. Show report\n5. Exit\nEnter Choice:");
+              System.out.print("\nSelect option of Susu management: \n1. Adding member \n2. Add contribution\n3. Closing week \n4. Show report\n5. Exit\nEnter Choice:");
                option = in.nextInt();
         switch(option){
            case 1 :
@@ -128,6 +177,7 @@ public class susu{
             break;
             case 2 :
                 m.contribute();
+                break;
            case 3 :
             m.close();
             break;
