@@ -56,6 +56,7 @@ class management{
             
             System.out.println("Do you want to add another member [y/n]");
             ch = in.next().charAt(0);
+            in.nextLine();// cleaner of buffers to allow next inputs
             }
             }
       
