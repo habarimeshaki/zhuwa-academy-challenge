@@ -22,8 +22,12 @@ class member{
     }
 
     void contribute(double contibution){
-        this.contribution = contribution;
+        if((this.contribution + contribution) <= 50){
+        this.contribution += contribution;
         owes();
+        }else{
+            System.out.println("Unable to set contribution, please try to enter "+owes+"units or below!\n");
+        }
     }
 
 
@@ -58,6 +62,21 @@ class management{
             ch = in.next().charAt(0);
             in.nextLine();// cleaner of buffers to allow next inputs
             }
+            }
+
+
+            void contribute(){
+                int index;
+                System.out.print("Enter member id:");
+                index=in.nextInt();
+                in.nextLine(); //clean integer reading buffers
+
+                if(members.get(index) != null){
+                    System.out.println("Add Contribution for "+members.get(index).name+" has contribution of "+members.get(index).contribution);
+                    double temp=in.nextDouble();
+                    in.nextLine();
+                    members.get(index).contribute(temp);//changing value of contribution
+                }
             }
       
       void close(){
@@ -101,19 +120,21 @@ public class susu{
 
       
         while(choice == 'y'){
-              System.out.print("\n\nSelect option of Susu management: \n1. Adding member \n2. Closing week \n3. Show report\n4. Exit\nEnter Choice:");
+              System.out.print("\n\nSelect option of Susu management: \n1. Adding member \n2.Add your\n3. Closing week \n4. Show report\n5. Exit\nEnter Choice:");
                option = in.nextInt();
         switch(option){
            case 1 :
             m.add();
             break;
-           case 2 :
+            case 2 :
+                m.contribute();
+           case 3 :
             m.close();
             break;
-           case 3 :
+           case 4 :
             m.report();
             break;
-            case 4 :
+            case 5 :
                 choice = 'n';
                 break;
            default :
