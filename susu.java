@@ -83,7 +83,24 @@ class management{
             in.nextLine();// cleaner of buffers to allow next inputs
             }
             }
+    void add(String name, double contribution){
 
+            members.add(new member(name, contribution));
+        System.out.println("Finished adding initial Members in the susu group as given\n");
+            
+            }
+
+           void contribute(int index, double contribution){
+
+            index -=100; // resetting default value of Id to match with indexes of list
+             try{
+
+                    members.get(index).contribute(contribution);//changing value of contribution
+                    
+                }catch(IndexOutOfBoundsException e){
+                    System.out.println("Please Enter valid member Id Please check on report.");
+                }
+           }
 
             void contribute(){
                 int index;
@@ -127,7 +144,7 @@ class management{
                     
                     if(members.get(members.size() - 1).getPaid() == true){
                         for(member resetPaid: members) resetPaid.setPaid(false); 
-
+                    }
 
 
                     for(member reset: members) {
@@ -156,8 +173,8 @@ class management{
       System.out.println("_____________________________________________________________________________________");
         
       }
+      }
 
-}
 
 public class susu{
     public static void main(String[] args){
@@ -166,7 +183,16 @@ public class susu{
 
         management m = new management();
         Scanner in = new Scanner(System.in);
-
+// adding initial members as given below
+/*
+ members (Ama, Kofi, Esi), weekly amount 50.00. Week 1: Ama and Kofi pay 50. Esi pays 30. Closing week 1 pays nothing and reports “Esi owes 20.00”. Esi pays 20, week 1 closes, and Ama receives 150.00. Week 2 begins, and Kofi is next.
+*/
+m.add("Ama", 50);
+m.add("Kofi", 50);
+m.add("Esi", 30);
+m.close();
+m.report();
+m.contribute(102, 20);
       
         while(choice == 'y'){
               System.out.print("\nSelect option of Susu management: \n1. Adding member \n2. Add contribution\n3. Closing week \n4. Show report\n5. Exit\nEnter Choice:");
