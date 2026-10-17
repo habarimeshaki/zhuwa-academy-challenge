@@ -12,5 +12,6 @@ I have achieved on this by using to classes one called management and other call
 through getter and setters method, I have also used to protect data to be modified with unverfied methods and validate data.
 
 also I have been using built in functions mostly form array list to validate values.
+also I have used helper functions to support me read data efficiently, by using IO exceptions and number Exceptions I have managed to vallidate inputs.
 
 by using give value, I have started by initialising class with fixed values and initial computations, and after, I added custom operations and vales from user inputs.

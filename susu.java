@@ -1,6 +1,80 @@
 import java.util.Scanner;
+import java.util.InputMismatchException;
 import java.util.ArrayList;
 
+// class for custom input to handle errors of user inputs
+public class readInput{
+    private static final Scanner scanner = new Scanner(System.in);
+  
+// Main hepler function to read all inputs
+
+private String readHelper(){
+    while(true){
+        try{
+        String text = scanner.nextLine().trim();
+        if(text.length() >= 1) return text;
+
+    }catch(InputMismatchException e){
+        System.out.println("\nInvalid inputs, please try again!");
+        scanner.nextLine();
+    }
+    }
+}
+
+  int readInt(){
+    while(true){
+        try{
+        int number = Integer.parseInt(readHelper());
+        return number;
+    }catch(NumberFormatException e){
+        System.out.println("\nInvalid Number input, please try again!");
+        scanner.nextLine();
+    }
+    }
+  }
+
+
+
+   char readChar(){
+    while(true){
+        try{
+        char character = readHelper().charAt(0);
+        return character;
+    }catch(StringIndexOutOfBoundsException e){
+        System.out.println("\nInvalid Characterr input, please try again!");
+        scanner.nextLine();
+    }
+    }
+  }
+
+     Double readDouble(){
+    while(true){
+        try{
+        double myDouble = Double.parseDouble(readHelper());
+        return myDouble;
+    }catch(NumberFormatException e){
+        System.out.println("\nInvalid Decimal Number input, please try again!");
+        scanner.nextLine();
+    }
+    }
+  }
+
+  String readString(){
+    while(true){
+        try{
+        String string = readHelper();
+        return string;
+    }catch(InputMismatchException e){
+        System.out.println("\nInvalid inputs, please try again!");
+        scanner.nextLine();
+    }
+    }
+  }
+
+  void readLine(){
+    scanner.nextLine();
+  }
+}
 
 //class that will store generar structure of required details for single person
 class member{
@@ -42,7 +116,7 @@ class member{
         System.out.println("Contribution added successfully!");
         owes();
         }else{
-            System.out.println("Unable to set contribution, please try to enter "+(50 - contribution)+" units or below!\n");
+            System.out.println("Unable to set contribution, please try to enter "+(50 - this.contribution)+" units or below!\n");
         }
     }
       public void owes(){
@@ -63,7 +137,7 @@ class management{
       
       // creating array list for storing multiple values of members without limited length of members
       ArrayList<member> members = new ArrayList<>();
-      Scanner in = new Scanner(System.in);
+        readInput read= new readInput(); // cutsom class to read user input and handle any exception errors
       
       void add(){
 
@@ -72,21 +146,20 @@ class management{
         
         while(ch == 'y' || ch == 'Y'){
             System.out.print("\nEnter Name:");
-            name = in.nextLine();
+            name = read.readString();
 
             System.out.print("Enter Contribution:");
-            contribution = in.nextDouble();
+            contribution = read.readDouble();
             members.add(new member(name, contribution));
             
             System.out.print("Do you want to add another member [y/n] : ");
-            ch = in.next().charAt(0);
-            in.nextLine();// cleaner of buffers to allow next inputs
+            ch = read.readChar();
             }
             }
     void add(String name, double contribution){
 
             members.add(new member(name, contribution));
-        System.out.println("Finished adding initial Members in the susu group as given\n");
+        System.out.println("Finished adding initial Member in the susu group as given\n");
             
             }
 
@@ -105,17 +178,15 @@ class management{
             void contribute(){
                 int index;
                 System.out.print("Enter member id:");
-                index=in.nextInt();
+                index=read.readInt();
                 index -= 100; // removing 100 from Displayed ID to match with index
 
 
-                in.nextLine(); //clean integer reading buffers
                 try{
 
                     if(members.get(index).getContribution() < 50){
                     System.out.print("\nAdd Contribution for "+members.get(index).getName()+" has contribution of "+members.get(index).getContribution()+": ");
-                    double temp=in.nextDouble();
-                    in.nextLine();
+                    double temp=read.readDouble();
                     members.get(index).contribute(temp);//changing value of contribution
                     }else{
                        System.out.print("\nMember "+members.get(index).getName()+" has contribution of "+members.get(index).getContribution()+" Which is enough.");
@@ -128,6 +199,8 @@ class management{
       
       void close(){
       double sum=0;
+      
+                System.out.println("\nTry Closing the week...");
         for(member contri: members){
             sum =sum + contri.getContribution();
             }
@@ -182,11 +255,13 @@ public class susu{
         char choice='y';
 
         management m = new management();
-        Scanner in = new Scanner(System.in);
+        readInput read= new readInput();
 // adding initial members as given below
 /*
  members (Ama, Kofi, Esi), weekly amount 50.00. Week 1: Ama and Kofi pay 50. Esi pays 30. Closing week 1 pays nothing and reports “Esi owes 20.00”. Esi pays 20, week 1 closes, and Ama receives 150.00. Week 2 begins, and Kofi is next.
 */
+System.out.println("Welcome to SUSU group Management system, A small saving group.\n\nAdding initial details...");
+
 m.add("Ama", 50);
 m.add("Kofi", 50);
 m.add("Esi", 30);
@@ -196,7 +271,7 @@ m.contribute(102, 20);
       
         while(choice == 'y'){
               System.out.print("\nSelect option of Susu management: \n1. Adding member \n2. Add contribution\n3. Closing week \n4. Show report\n5. Exit\nEnter Choice:");
-               option = in.nextInt();
+               option = read.readInt();
         switch(option){
            case 1 :
             m.add();
